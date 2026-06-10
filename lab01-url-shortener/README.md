@@ -47,6 +47,8 @@ Frontend environment variables:
 uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
 ```
 
+   If Railway is pointed at the repository root instead of the backend folder, the root-level `requirements.txt` and `Procfile` in `lab01-url-shortener/` keep the backend deployable by forwarding into `backend/`.
+
 4. Add the backend environment variables in Railway:
    - `SHORTENER_DB_PATH=/data/shortener.db` or another writable path if you want to persist the SQLite file inside the service volume.
    - `FRONTEND_ORIGINS=<your Vercel domain>,http://localhost:3000,http://127.0.0.1:3000`

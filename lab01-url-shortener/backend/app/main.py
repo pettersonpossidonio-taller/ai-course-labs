@@ -45,15 +45,16 @@ def generate_short_code(length: int = CODE_LENGTH) -> str:
 def create_app(db_path: str | Path | None = None) -> FastAPI:
     app = FastAPI(title="URL Shortener API")
     default_origins = "http://localhost:3000,http://127.0.0.1:3000"
+    allowed_origins = [
+        origin.strip()
+        for origin in os.getenv("FRONTEND_ORIGINS", default_origins).split(",")
+        if origin.strip()
+    ]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            origin.strip()
-            for origin in os.getenv("FRONTEND_ORIGINS", default_origins).split(",")
-            if origin.strip()
-        ],
+        allow_origins=allowed_origins,
         allow_credentials=False,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["*"],
     )
     app.state.db_path = Path(

@@ -1,0 +1,277 @@
+:root {
+  color-scheme: light;
+  --bg: #f4efe7;
+  --panel: rgba(255, 255, 255, 0.86);
+  --text: #16202d;
+  --muted: #5c6675;
+  --border: rgba(22, 32, 45, 0.12);
+  --shadow: 0 24px 72px rgba(22, 32, 45, 0.12);
+  --accent: #1d4ed8;
+  --accent-strong: #0f2f86;
+  --good: #2e7d32;
+  --bad: #b42318;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: linear-gradient(180deg, #f5efe5, #edf4ff 60%, #ffffff);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 14px;
+  padding: 0.95rem 1.1rem;
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 240px;
+  line-height: 1.5;
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.app-shell {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-copy,
+.panel,
+.control-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.hero-copy,
+.panel,
+.control-panel {
+  padding: 1rem;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 4vw, 3.6rem);
+  line-height: 0.98;
+}
+
+.lead,
+.muted,
+.error {
+  color: var(--muted);
+}
+
+.control-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field span {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.toolbar {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.phase-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.phase {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.phase.active {
+  background: rgba(29, 78, 216, 0.12);
+  border-color: rgba(29, 78, 216, 0.25);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.plan-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.plan-step {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 0.9rem;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.plan-topline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.status-completed {
+  border-left: 6px solid var(--good);
+}
+
+.status-failed {
+  border-left: 6px solid var(--bad);
+}
+
+.status-in_progress {
+  border-left: 6px solid var(--accent);
+}
+
+.status-pending {
+  border-left: 6px solid #8a94a6;
+}
+
+.code-block {
+  margin: 0.75rem 0 0;
+  padding: 1rem;
+  overflow-x: auto;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 16px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.diff-list {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.diff-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.diff-cell {
+  margin: 0;
+  padding: 0.8rem;
+  min-height: 2.5rem;
+  border-radius: 14px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.diff-cell.original {
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.diff-cell.migrated {
+  background: rgba(46, 125, 50, 0.08);
+}
+
+.error-list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.split-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .page-shell {
+    padding: 1.5rem;
+  }
+
+  .hero-copy,
+  .panel,
+  .control-panel {
+    padding: 1.25rem;
+  }
+
+  .toolbar,
+  .split-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 639px) {
+  .diff-row {
+    grid-template-columns: 1fr;
+  }
+}

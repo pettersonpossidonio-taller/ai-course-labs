@@ -12,8 +12,8 @@ from pydantic import BaseModel, Field, ValidationError
 
 logger = logging.getLogger(__name__)
 
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-MODEL_NAME = "google/gemma-3-27b-it:free"
+DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+DEFAULT_OPENROUTER_MODEL = "google/gemma-3-27b-it:free"
 
 RiskLevel = Literal["Low", "Medium", "High"]
 FindingCategory = Literal["Bug", "Security", "Performance", "Style", "Maintainability"]
@@ -71,8 +71,9 @@ app = create_app()
 
 def analyze_code(code: str, language: str) -> AnalyzeResponse:
     client = get_client()
+    model_name = os.getenv("OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL).strip()
     response = client.chat.completions.create(
-        model=MODEL_NAME,
+        model=model_name,
         temperature=0.2,
         response_format={"type": "json_object"},
         messages=[
@@ -100,7 +101,8 @@ def get_client() -> OpenAI:
     api_key = os.getenv("OPENROUTER_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("OPENROUTER_API_KEY is required")
-    return OpenAI(api_key=api_key, base_url=OPENROUTER_BASE_URL)
+    base_url = os.getenv("OPENROUTER_BASE_URL", DEFAULT_OPENROUTER_BASE_URL).strip()
+    return OpenAI(api_key=api_key, base_url=base_url)
 
 
 def system_prompt() -> str:

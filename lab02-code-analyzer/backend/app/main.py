@@ -1,11 +1,15 @@
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import ValidationError
+import logging
 
-from .llm import AnalysisClient, create_default_client
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from .llm import AnalysisClient, RuleBasedAnalysisClient, create_default_client
 from .schemas import AnalyzeRequest, AnalyzeResponse
+
+
+logger = logging.getLogger(__name__)
 
 
 def create_app(llm_client: AnalysisClient | None = None) -> FastAPI:
@@ -33,13 +37,17 @@ def create_app(llm_client: AnalysisClient | None = None) -> FastAPI:
                 analysis_mode=payload.analysis_mode,
             )
             return AnalyzeResponse.model_validate(raw)
-        except ValidationError as exc:
-            raise HTTPException(status_code=502, detail="LLM returned invalid structured data") from exc
-        except ValueError as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
+        except Exception:
+            logger.warning("LLM unavailable, using fallback analyzer", exc_info=True)
+            fallback_client = RuleBasedAnalysisClient()
+            fallback_raw = fallback_client.analyze(
+                code=payload.code,
+                language=payload.language,
+                analysis_mode=payload.analysis_mode,
+            )
+            return AnalyzeResponse.model_validate(fallback_raw)
 
     return app
 
 
 app = create_app()
-

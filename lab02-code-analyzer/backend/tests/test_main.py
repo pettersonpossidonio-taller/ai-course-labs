@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi.testclient import TestClient
+import httpx
 
 from app.main import create_app
 
@@ -35,6 +36,13 @@ class FakeClient:
                 "test_coverage_estimate": "low",
             },
         }
+
+
+class FailingClient:
+    def analyze(self, *, code: str, language: str, analysis_mode: str) -> dict[str, object]:
+        request = httpx.Request("POST", "https://openrouter.ai/api/v1/chat/completions")
+        response = httpx.Response(429, request=request)
+        raise httpx.HTTPStatusError("429 Too Many Requests", request=request, response=response)
 
 
 def test_health_endpoint() -> None:
@@ -92,3 +100,24 @@ def test_analyze_security_mode() -> None:
     assert body["issues"][0]["category"] == "maintainability"
     assert fake_client.calls[-1]["analysis_mode"] == "security"
 
+
+def test_analyze_falls_back_when_llm_fails(caplog) -> None:
+    client = TestClient(create_app(FailingClient()))
+
+    with caplog.at_level("WARNING"):
+        response = client.post(
+            "/analyze",
+            json={
+                "code": "print('hello')\nvalue = 1",
+                "language": "python",
+                "analysis_mode": "general",
+            },
+        )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["summary"]
+    assert "issues" in body
+    assert "suggestions" in body
+    assert "metrics" in body
+    assert any("LLM unavailable, using fallback analyzer" in record.message for record in caplog.records)

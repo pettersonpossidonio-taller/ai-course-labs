@@ -284,7 +284,10 @@ export default function HomePage() {
 
               <label className="field upload-field">
                 <span>File Upload</span>
-                <input type="file" onChange={handleFileUpload} />
+                <div className="upload-row">
+                  <input type="file" onChange={handleFileUpload} />
+                  <p className="file-name file-name-inline">{fileName ? `Loaded: ${fileName}` : "No file loaded yet."}</p>
+                </div>
               </label>
             </div>
 
@@ -309,7 +312,6 @@ export default function HomePage() {
                   "Analyze Code"
                 )}
               </button>
-              {fileName ? <p className="file-name">Loaded: {fileName}</p> : <p className="file-name">Sample code loaded.</p>}
             </div>
 
             {error ? <p className="error">{error}</p> : null}

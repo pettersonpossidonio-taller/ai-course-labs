@@ -285,8 +285,11 @@ export default function HomePage() {
               <label className="field upload-field">
                 <span>File Upload</span>
                 <div className="upload-row">
-                  <input type="file" onChange={handleFileUpload} />
-                  <p className="file-name file-name-inline">{fileName ? `Loaded: ${fileName}` : "No file loaded yet."}</p>
+                  <label className="browse-button">
+                    <span>Browse...</span>
+                    <input type="file" onChange={handleFileUpload} />
+                  </label>
+                  <p className="file-name file-name-inline">{fileName ? fileName : "No file loaded yet."}</p>
                 </div>
               </label>
             </div>
